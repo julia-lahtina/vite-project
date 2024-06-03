@@ -11,7 +11,7 @@ export const DecksList = () => {
 
   useEffect(() => {
     decksAPI.getDecks().then((res) => {
-      dispatch(setDecks(res.data.items))
+      dispatch(setDecks(res.data.items)) // отправили колоды в наш стейт
     })
   }, [])
   return (
