@@ -16,8 +16,8 @@ export const DecksList = () => {
   }, [])
   return (
     <ul className={s.list}>
-      {decks.map((d, index) => {
-        return <DeckItem key={index} deck={d} />
+      {decks.map((d) => {
+        return <DeckItem key={d.id} deck={d} />
       })}
     </ul>
   )
