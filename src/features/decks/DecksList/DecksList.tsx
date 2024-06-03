@@ -15,11 +15,10 @@ export const DecksList = () => {
     })
   }, [])
   return (
-    <>
-      <ul className={s.list}></ul>
+    <ul className={s.list}>
       {decks.map((d, index) => {
         return <DeckItem key={index} deck={d} />
       })}
-    </>
+    </ul>
   )
 }
