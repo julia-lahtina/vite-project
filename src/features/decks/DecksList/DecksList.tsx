@@ -4,10 +4,12 @@ import { decksAPI } from '../decks-api'
 import { setDecks } from '../decks-reducer'
 import { useAppDispatch, useAppSelector } from '../../../app/store'
 import { DeckItem } from './DeckItem/DeckItem'
+import { selectDecks } from '../decks-selectors'
+import { useSelector } from 'react-redux'
 
 export const DecksList = () => {
   const dispatch = useAppDispatch()
-  const decks = useAppSelector((state) => state.decksReducer.decks)
+  const decks = useSelector(selectDecks)
 
   useEffect(() => {
     decksAPI.getDecks().then((res) => {
