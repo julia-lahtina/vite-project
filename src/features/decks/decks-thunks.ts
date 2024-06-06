@@ -28,17 +28,19 @@ export const deleteDeckTC = (id: string) => async (dispatch: Dispatch) => {
   })
 }
 
+//case1 - error from backend
+//case2 - axios error
+//case3 - native JS error
 export const updateDeckTC = (params: UpdateDeckParams) => async (dispatch: Dispatch) => {
   try {
     const res = await decksAPI.updateDeck(params)
     dispatch(updateDeckAC(res.data))
   } catch (e) {
     let errorMessage: string
-    //case1 - error from backend
-    //case2 - axios error
-    //case3 - native JS error
+
     if (isAxiosError<ServerError>(e)) {
-      errorMessage = e.response ? e.response.data.errorMessage[0].message : e.message
+      console.log(e)
+      errorMessage = e.response ? e.response.data.errorMessages[0].message : e.message
     } else {
       errorMessage = (e as Error).message
     }
@@ -47,5 +49,5 @@ export const updateDeckTC = (params: UpdateDeckParams) => async (dispatch: Dispa
 }
 
 type ServerError = {
-  errorMessage: Array<{ field: string; message: string }>
+  errorMessages: Array<{ field: string; message: string }>
 }
