@@ -2,6 +2,7 @@ import { Dispatch } from 'redux'
 import { decksAPI, UpdateDeckParams } from './decks-api.ts'
 import { addDeckAC, deleteDeckAC, setDecksAC, updateDeckAC } from './decks-reducer.ts'
 import { setAppStatus } from '../../app/app-reducer.ts'
+import { isAxiosError } from 'axios'
 
 export const fetchDecksTC = () => async (dispatch: Dispatch) => {
   dispatch(setAppStatus('loading'))
@@ -28,7 +29,23 @@ export const deleteDeckTC = (id: string) => async (dispatch: Dispatch) => {
 }
 
 export const updateDeckTC = (params: UpdateDeckParams) => async (dispatch: Dispatch) => {
-  return decksAPI.updateDeck(params).then((res) => {
+  try {
+    const res = await decksAPI.updateDeck(params)
     dispatch(updateDeckAC(res.data))
-  })
+  } catch (e) {
+    let errorMessage: string
+    //case1 - error from backend
+    //case2 - axios error
+    //case3 - native JS error
+    if (isAxiosError<ServerError>(e)) {
+      errorMessage = e.response ? e.response.data.errorMessage[0].message : e.message
+    } else {
+      errorMessage = (e as Error).message
+    }
+    console.log(errorMessage)
+  }
+}
+
+type ServerError = {
+  errorMessage: Array<{ field: string; message: string }>
 }
