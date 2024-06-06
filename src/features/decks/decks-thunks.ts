@@ -1,14 +1,27 @@
 import { Dispatch } from 'redux'
-import { AddDeckParams, decksAPI } from './decks-api'
-import { addDecks, setDecks } from './decks-reducer'
+import { decksAPI, UpdateDeckParams } from './decks-api.ts'
+import { addDeckAC, deleteDeckAC, setDecksAC, updateDeckAC } from './decks-reducer.ts'
 
 export const fetchDecksTC = () => (dispatch: Dispatch) => {
-  decksAPI.getDecks().then((res) => {
-    dispatch(setDecks(res.data.items)) // отправили колоды в наш стейт
+  decksAPI.fetchDecks().then((res) => {
+    dispatch(setDecksAC(res.data.items))
   })
 }
 
-export const addDecksTC = (params: AddDeckParams) => async (dispatch: Dispatch) => {
-  const res = await decksAPI.addDeck(params)
-  dispatch(addDecks(res.data))
+export const addDeckTC = (name: string) => async (dispatch: Dispatch) => {
+  return decksAPI.addDeck(name).then((res) => {
+    dispatch(addDeckAC(res.data))
+  })
+}
+
+export const deleteDeckTC = (id: string) => async (dispatch: Dispatch) => {
+  return decksAPI.deleteDeck(id).then((res) => {
+    dispatch(deleteDeckAC(res.data.id))
+  })
+}
+
+export const updateDeckTC = (params: UpdateDeckParams) => async (dispatch: Dispatch) => {
+  return decksAPI.updateDeck(params).then((res) => {
+    dispatch(updateDeckAC(res.data))
+  })
 }
